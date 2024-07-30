@@ -30,7 +30,7 @@ public class Squad {
     @JoinColumn(name = "nation_id")
     private Nation nation;
 
-    public Squad(String name, Set<Shirt> shirts, Sponsor sponsor, Nation nation) {
+    public Squad(String name, Sponsor sponsor, Nation nation) {
         this.name = name;
         this.shirts = shirts;
         this.sponsor = sponsor;

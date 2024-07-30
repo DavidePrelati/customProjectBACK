@@ -18,11 +18,6 @@ public class CustomerService {
     @Autowired
     private CustomerRepo customerRepo;
 
-    public List<Customer> findAll() {
-        return customerRepo.findAll();
-    }
-
-
     public Customer saveCustomer(CustomerDTO body) {
         if (this.customerRepo.existsByUsername(body.username())) {
             throw new BadRequestException("Esiste già un cliente con questo username!");
