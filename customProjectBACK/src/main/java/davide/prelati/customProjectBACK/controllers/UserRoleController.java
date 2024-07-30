@@ -30,6 +30,7 @@ public class UserRoleController {
     @GetMapping("/{roleId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserRole findById(@PathVariable long roleId) {
+
         return this.userRoleService.findById(roleId);
     }
 

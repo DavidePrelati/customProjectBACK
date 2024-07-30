@@ -10,17 +10,18 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtTools {
-
-    @Value("${jwt.secret}")
+public class JWTTokenConfiguration {
     private String secret;
 
+    public JWTTokenConfiguration(@Value("${jwt.secret}") String secret) {
+        this.secret = secret;
+    }
 
-    public String createToken(User user) {
+    public String createToken(User utente) {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-                .subject(String.valueOf(user.getId()))
+                .subject(String.valueOf(utente.getId()))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
@@ -28,10 +29,8 @@ public class JwtTools {
     public void verifyToken(String token) {
         try {
             Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
-
         } catch (Exception ex) {
-            throw new UnauthorizedException("Problemi del token,rilogga per un nuovo token");
-
+            throw new UnauthorizedException("Errore col token, preghiamo di riprovare a fare il login!");
         }
     }
 
