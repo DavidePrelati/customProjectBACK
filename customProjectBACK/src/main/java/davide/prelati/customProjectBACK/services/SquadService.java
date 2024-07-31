@@ -1,8 +1,10 @@
 package davide.prelati.customProjectBACK.services;
 
+import davide.prelati.customProjectBACK.entities.Nation;
 import davide.prelati.customProjectBACK.entities.Squad;
 import davide.prelati.customProjectBACK.exceptions.BadRequestException;
 import davide.prelati.customProjectBACK.exceptions.NotFoundException;
+import davide.prelati.customProjectBACK.payloads.NationDTO;
 import davide.prelati.customProjectBACK.payloads.SquadDTO;
 import davide.prelati.customProjectBACK.repositories.SquadRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,26 @@ public class SquadService {
     @Autowired
     private SquadRepo squadRepo;
 
-    public List<Squad> findAll() {
-        return squadRepo.findAll();
-    }
+    @Autowired
+    private NationService nationService;
+
 
     public Squad saveSquad(SquadDTO body) {
         if (this.squadRepo.existsByName(body.name())) {
             throw new BadRequestException("Esiste già un cliente con questo username!");
         }
 
-        Squad squad = new Squad(body.name(), body.sponsor(), body.nationId());
+        Squad squad = new Squad(body.name(), body.sponsor());
 
         return squadRepo.save(squad);
+    }
+
+    public Squad addNation(long squadId, NationDTO body) {
+        Nation found = this.nationService.findByName(body.name());
+        Squad squad = this.findById(squadId);
+
+        squad.addNation(found);
+        return this.squadRepo.save(squad);
     }
 
     public List<Squad> getAllSquad() {
@@ -48,8 +58,6 @@ public class SquadService {
 
         found.setName(body.name());
         found.setSponsor(body.sponsor());
-        found.setNation(body.nationId());
-
 
         return squadRepo.save(found);
     }
@@ -60,15 +68,6 @@ public class SquadService {
         return squadRepo.orderByName(pageable);
     }
 
-    public Page<Squad> orderByNationId(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return squadRepo.orderByNationId(pageable);
-    }
-
-    public Page<Squad> filterByNationId(int page, int size, Long nationId) {
-        Pageable pageable = PageRequest.of(page, size);
-        return squadRepo.filterByNationId(nationId, pageable);
-    }
 
     public Page<Squad> filterByName(int page, int size, String name) {
         Pageable pageable = PageRequest.of(page, size);

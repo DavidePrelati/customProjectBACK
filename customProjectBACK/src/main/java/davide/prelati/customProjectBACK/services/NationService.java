@@ -23,6 +23,10 @@ public class NationService {
         return nationRepo.findAll();
     }
 
+    public Nation findByName(String name) {
+        return this.nationRepo.findByName(name).orElseThrow(() -> new BadRequestException("Il ruolo " + name + " non esiste"));
+    }
+
     public Nation saveNation(NationDTO body) {
         if (this.nationRepo.existsByName(body.name())) {
             throw new BadRequestException("Esiste già una nazione con questo nome!");
