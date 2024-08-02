@@ -4,18 +4,18 @@ import davide.prelati.customProjectBACK.entities.User;
 import davide.prelati.customProjectBACK.exceptions.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class JWTTokenConfiguration {
-    private String secret;
+    //@Value("${jwt.secret}")
+    private String secret = "d5a5efsA1ymNON5ionZGqEmvoIyizEMpqOFM2ABZ";
 
-    public JWTTokenConfiguration(@Value("${jwt.secret}") String secret) {
-        this.secret = secret;
-    }
+    // public JWTTokenConfiguration( String secret) {
+    //    this.secret = secret;
+    //}
 
     public String createToken(User utente) {
         return Jwts.builder()
