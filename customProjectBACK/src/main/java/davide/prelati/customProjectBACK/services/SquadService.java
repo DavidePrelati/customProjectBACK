@@ -43,6 +43,10 @@ public class SquadService {
         return this.squadRepo.save(squad);
     }
 
+    public List<Squad> findSquadsByNationId(Long nationId) {
+        return squadRepo.findByNationId(nationId);
+    }
+
     public List<Squad> getAllSquad() {
         return squadRepo.findAll();
     }

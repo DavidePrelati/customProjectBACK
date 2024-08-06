@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface SquadRepo extends JpaRepository<Squad, Long> {
 
     boolean existsById(Long id);
 
     boolean existsByName(String username);
 
+    List<Squad> findByNationId(Long nationId);
 
     @Query("SELECT sq FROM Squad sq ORDER BY name")
     Page<Squad> orderByName(Pageable pageable);

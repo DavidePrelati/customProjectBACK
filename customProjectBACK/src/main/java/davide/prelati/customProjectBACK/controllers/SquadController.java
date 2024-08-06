@@ -35,7 +35,7 @@ public class SquadController {
     }
 
     @PatchMapping("/{squadId}/nations/add")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Squad addNation(@PathVariable long squadId, @RequestBody @Validated NationDTO body, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.getAllErrors());
@@ -45,16 +45,18 @@ public class SquadController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    List<Squad> getAllSquad() {
-
-        return squadService.getAllSquad();
+    public List<Squad> getAllSquads(@RequestParam(required = false) Long nationId) {
+        if (nationId != null) {
+            return squadService.findSquadsByNationId(nationId);
+        } else {
+            return squadService.getAllSquad();
+        }
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public Squad findSquadById(@PathVariable Long id) {
-
         return squadService.findById(id);
     }
 
@@ -77,15 +79,13 @@ public class SquadController {
 
     @GetMapping("/name")
     @PreAuthorize("hasAuthority('ADMIN')")
-    Page<Squad> findByName(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public Page<Squad> findByName(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return squadService.orderByName(page, size);
     }
 
-
     @GetMapping("/filtername/{name}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    Page<Squad> filterByName(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @PathVariable String name) {
+    public Page<Squad> filterByName(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @PathVariable String name) {
         return squadService.filterByName(page, size, name);
     }
-
 }
