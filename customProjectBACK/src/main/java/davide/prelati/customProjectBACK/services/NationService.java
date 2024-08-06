@@ -31,7 +31,7 @@ public class NationService {
         if (this.nationRepo.existsByName(body.name())) {
             throw new BadRequestException("Esiste già una nazione con questo nome!");
         }
-        Nation customer = new Nation(body.name());
+        Nation customer = new Nation(body.name(), body.url());
 
         return nationRepo.save(customer);
     }

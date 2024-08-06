@@ -38,7 +38,11 @@ public class Squad {
     }
 
     public void addNation(Nation nation) {
+
         this.nation = nation;
+        if (!nation.getSquads().contains(this)) {
+            nation.getSquads().add(this);
+        }
     }
 
 }

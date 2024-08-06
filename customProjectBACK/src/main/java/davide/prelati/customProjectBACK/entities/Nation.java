@@ -18,12 +18,19 @@ public class Nation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String url;
 
     @OneToMany(mappedBy = "nation")
     private Set<Squad> squads;
 
-    public Nation(String name) {
+    public Nation(String name, String url) {
         this.name = name;
-        this.squads = squads;
+        this.url = url;
+
+    }
+
+    public void addSquad(Squad squad) {
+        squads.add(squad);
+        squad.setNation(this);
     }
 }
