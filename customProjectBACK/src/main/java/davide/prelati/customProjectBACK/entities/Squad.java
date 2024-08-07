@@ -20,6 +20,7 @@ public class Squad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String urlImage;
 
     @OneToMany(mappedBy = "squad")
     private Set<Shirt> shirts;
@@ -30,8 +31,9 @@ public class Squad {
     @JoinColumn(name = "nation_id")
     private Nation nation;
 
-    public Squad(String name, Sponsor sponsor) {
+    public Squad(String name, Sponsor sponsor, String urlImage) {
         this.name = name;
+        this.urlImage = urlImage;
         this.shirts = shirts;
         this.sponsor = sponsor;
         this.nation = nation;

@@ -30,7 +30,7 @@ public class SquadService {
             throw new BadRequestException("Esiste già un cliente con questo username!");
         }
 
-        Squad squad = new Squad(body.name(), body.sponsor());
+        Squad squad = new Squad(body.name(), body.sponsor(), body.urlImage());
 
         return squadRepo.save(squad);
     }
