@@ -41,6 +41,7 @@ public class NationController {
         return nationService.getAllNation();
     }
 
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)

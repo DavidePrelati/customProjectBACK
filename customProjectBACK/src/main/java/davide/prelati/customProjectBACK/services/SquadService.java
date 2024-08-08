@@ -1,10 +1,8 @@
 package davide.prelati.customProjectBACK.services;
 
-import davide.prelati.customProjectBACK.entities.Nation;
 import davide.prelati.customProjectBACK.entities.Squad;
 import davide.prelati.customProjectBACK.exceptions.BadRequestException;
 import davide.prelati.customProjectBACK.exceptions.NotFoundException;
-import davide.prelati.customProjectBACK.payloads.NationDTO;
 import davide.prelati.customProjectBACK.payloads.SquadDTO;
 import davide.prelati.customProjectBACK.repositories.SquadRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +28,11 @@ public class SquadService {
             throw new BadRequestException("Esiste già un cliente con questo username!");
         }
 
-        Squad squad = new Squad(body.name(), body.sponsor(), body.urlImage());
+        Squad squad = new Squad(body.name(), body.sponsor(), body.urlImage(), body.nation());
 
         return squadRepo.save(squad);
     }
 
-    public Squad addNation(long squadId, NationDTO body) {
-        Nation found = this.nationService.findByName(body.name());
-        Squad squad = this.findById(squadId);
-
-        squad.addNation(found);
-        return this.squadRepo.save(squad);
-    }
-
-    public List<Squad> findSquadsByNationId(Long nationId) {
-        return squadRepo.findByNationId(nationId);
-    }
 
     public List<Squad> getAllSquad() {
         return squadRepo.findAll();

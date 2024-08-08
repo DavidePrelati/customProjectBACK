@@ -1,10 +1,12 @@
 package davide.prelati.customProjectBACK.services;
 
 import davide.prelati.customProjectBACK.entities.Nation;
+import davide.prelati.customProjectBACK.entities.Squad;
 import davide.prelati.customProjectBACK.exceptions.BadRequestException;
 import davide.prelati.customProjectBACK.exceptions.NotFoundException;
 import davide.prelati.customProjectBACK.payloads.NationDTO;
 import davide.prelati.customProjectBACK.repositories.NationRepo;
+import davide.prelati.customProjectBACK.repositories.SquadRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,12 +14,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NationService {
 
     @Autowired
     private NationRepo nationRepo;
+
+    @Autowired
+    private SquadRepo squadRepo;
+
+    public Optional<Nation> findNationByName(String name) {
+        return nationRepo.findByName(name);
+    }
+
+    public List<Squad> findSquadsByNation(String nationName) {
+        return squadRepo.findByNationName(nationName);
+    }
 
     public List<Nation> getAllNation() {
         return nationRepo.findAll();

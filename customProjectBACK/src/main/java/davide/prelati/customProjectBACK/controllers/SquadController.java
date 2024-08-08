@@ -2,9 +2,9 @@ package davide.prelati.customProjectBACK.controllers;
 
 import davide.prelati.customProjectBACK.entities.Squad;
 import davide.prelati.customProjectBACK.exceptions.BadRequestException;
-import davide.prelati.customProjectBACK.payloads.NationDTO;
 import davide.prelati.customProjectBACK.payloads.SquadDTO;
 import davide.prelati.customProjectBACK.payloads.SquadResponseDTO;
+import davide.prelati.customProjectBACK.services.NationService;
 import davide.prelati.customProjectBACK.services.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,9 @@ public class SquadController {
     @Autowired
     private SquadService squadService;
 
+    @Autowired
+    private NationService nationService;
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,23 +37,16 @@ public class SquadController {
         return new SquadResponseDTO(squadService.saveSquad(body).getId());
     }
 
-    @PatchMapping("/{squadId}/nations/add")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Squad addNation(@PathVariable long squadId, @RequestBody @Validated NationDTO body, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors());
-        }
-        return this.squadService.addNation(squadId, body);
-    }
-
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Squad> getAllSquads(@RequestParam(required = false) Long nationId) {
-        if (nationId != null) {
-            return squadService.findSquadsByNationId(nationId);
-        } else {
-            return squadService.getAllSquad();
-        }
+    List<Squad> getAllSquad() {
+
+        return squadService.getAllSquad();
+    }
+
+    @GetMapping("/{name}/squads")
+    public List<Squad> getSquadsByNation(@PathVariable String name) {
+        return nationService.findSquadsByNation(name);
     }
 
     @GetMapping("/{id}")

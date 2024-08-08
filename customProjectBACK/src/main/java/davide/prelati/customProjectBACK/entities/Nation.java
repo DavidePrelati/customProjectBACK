@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,8 +21,8 @@ public class Nation {
     private String name;
     private String url;
 
-    @OneToMany(mappedBy = "nation")
-    private Set<Squad> squads;
+    @OneToMany(mappedBy = "nation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Squad> squads = new HashSet<>();
 
     public Nation(String name, String url) {
         this.name = name;
@@ -29,8 +30,4 @@ public class Nation {
 
     }
 
-    public void addSquad(Squad squad) {
-        squads.add(squad);
-        squad.setNation(this);
-    }
 }

@@ -15,7 +15,7 @@ public interface SquadRepo extends JpaRepository<Squad, Long> {
 
     boolean existsByName(String username);
 
-    List<Squad> findByNationId(Long nationId);
+    List<Squad> findByNationName(String nationName);
 
     @Query("SELECT sq FROM Squad sq ORDER BY name")
     Page<Squad> orderByName(Pageable pageable);

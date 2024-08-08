@@ -1,5 +1,6 @@
 package davide.prelati.customProjectBACK.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import davide.prelati.customProjectBACK.enums.Sponsor;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,11 +28,12 @@ public class Squad {
     @Enumerated(EnumType.STRING)
     private Sponsor sponsor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nation_id")
+    @JsonIgnore
     private Nation nation;
 
-    public Squad(String name, Sponsor sponsor, String urlImage) {
+    public Squad(String name, Sponsor sponsor, String urlImage, Nation nation) {
         this.name = name;
         this.urlImage = urlImage;
         this.shirts = shirts;
@@ -39,12 +41,5 @@ public class Squad {
         this.nation = nation;
     }
 
-    public void addNation(Nation nation) {
-
-        this.nation = nation;
-        if (!nation.getSquads().contains(this)) {
-            nation.getSquads().add(this);
-        }
-    }
 
 }
