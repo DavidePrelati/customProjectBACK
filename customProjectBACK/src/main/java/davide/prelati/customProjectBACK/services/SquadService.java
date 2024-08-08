@@ -1,9 +1,11 @@
 package davide.prelati.customProjectBACK.services;
 
+import davide.prelati.customProjectBACK.entities.Shirt;
 import davide.prelati.customProjectBACK.entities.Squad;
 import davide.prelati.customProjectBACK.exceptions.BadRequestException;
 import davide.prelati.customProjectBACK.exceptions.NotFoundException;
 import davide.prelati.customProjectBACK.payloads.SquadDTO;
+import davide.prelati.customProjectBACK.repositories.ShirtRepo;
 import davide.prelati.customProjectBACK.repositories.SquadRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ public class SquadService {
     @Autowired
     private NationService nationService;
 
+    @Autowired
+    private ShirtRepo shirtRepo;
 
     public Squad saveSquad(SquadDTO body) {
         if (this.squadRepo.existsByName(body.name())) {
@@ -33,6 +37,10 @@ public class SquadService {
         return squadRepo.save(squad);
     }
 
+
+    public List<Shirt> findShirtsBySquad(String squadName) {
+        return shirtRepo.findBySquadName(squadName);
+    }
 
     public List<Squad> getAllSquad() {
         return squadRepo.findAll();

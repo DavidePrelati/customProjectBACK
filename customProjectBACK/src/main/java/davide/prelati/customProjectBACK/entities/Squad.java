@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -23,8 +24,9 @@ public class Squad {
     private String name;
     private String urlImage;
 
-    @OneToMany(mappedBy = "squad")
-    private Set<Shirt> shirts;
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Shirt> shirts = new HashSet<>();
+    ;
     @Enumerated(EnumType.STRING)
     private Sponsor sponsor;
 
@@ -36,7 +38,6 @@ public class Squad {
     public Squad(String name, Sponsor sponsor, String urlImage, Nation nation) {
         this.name = name;
         this.urlImage = urlImage;
-        this.shirts = shirts;
         this.sponsor = sponsor;
         this.nation = nation;
     }

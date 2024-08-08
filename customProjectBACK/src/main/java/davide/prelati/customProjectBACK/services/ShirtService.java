@@ -24,7 +24,7 @@ public class ShirtService {
             throw new BadRequestException("Esiste già un cliente con questo username!");
         }
 
-        Shirt shirt = new Shirt(body.name(), body.size(), body.number(), body.price(), body.urlImage());
+        Shirt shirt = new Shirt(body.name(), body.number(), body.price(), body.urlImage(), body.squad());
 
         return shirtRepo.save(shirt);
     }
@@ -43,7 +43,6 @@ public class ShirtService {
 
 
         found.setName(body.name());
-        found.setSize(body.size());
         found.setNumber(body.number());
         found.setPrice(body.price());
         found.setUrlImage(body.urlImage());
@@ -61,11 +60,6 @@ public class ShirtService {
         return shirtRepo.orderByName(pageable);
     }
 
-    public Page<Shirt> orderBySize(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return shirtRepo.orderBySize(pageable);
-    }
-
     public Page<Shirt> orderByPrice(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return shirtRepo.orderByPrice(pageable);
@@ -76,10 +70,6 @@ public class ShirtService {
         return shirtRepo.filterByName(username, pageable);
     }
 
-    public Page<Shirt> filterBySize(int page, int size, String name) {
-        Pageable pageable = PageRequest.of(page, size);
-        return shirtRepo.filterBySize(name, pageable);
-    }
 
     public Page<Shirt> filterByPrice(int page, int size, String surname) {
         Pageable pageable = PageRequest.of(page, size);

@@ -6,6 +6,7 @@ import davide.prelati.customProjectBACK.exceptions.BadRequestException;
 import davide.prelati.customProjectBACK.payloads.ShirtDTO;
 import davide.prelati.customProjectBACK.payloads.ShirtResponseDTO;
 import davide.prelati.customProjectBACK.services.ShirtService;
+import davide.prelati.customProjectBACK.services.SquadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class ShirtController {
     @Autowired
     private ShirtService shirtService;
 
+    @Autowired
+    private SquadService squadService;
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,6 +36,11 @@ public class ShirtController {
             throw new BadRequestException(bindingResult.getAllErrors());
         }
         return new ShirtResponseDTO(shirtService.saveShirt(body).getId());
+    }
+
+    @GetMapping("/{name}/shirts")
+    public List<Shirt> getShirtsBySquad(@PathVariable String name) {
+        return squadService.findShirtsBySquad(name);
     }
 
     @GetMapping
@@ -72,12 +81,6 @@ public class ShirtController {
         return shirtService.orderByName(page, size);
     }
 
-    @GetMapping("/size")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    Page<Shirt> findBySize(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return shirtService.orderBySize(page, size);
-    }
-
     @GetMapping("/price")
     @PreAuthorize("hasAuthority('ADMIN')")
     Page<Shirt> findByPrice(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
@@ -88,12 +91,6 @@ public class ShirtController {
     @PreAuthorize("hasAuthority('ADMIN')")
     Page<Shirt> filterByName(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @PathVariable String name) {
         return shirtService.filterByName(page, size, name);
-    }
-
-    @GetMapping("/filtertaglia/{taglia}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    Page<Shirt> filterBySize(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @PathVariable String taglia) {
-        return shirtService.filterBySize(page, size, taglia);
     }
 
     @GetMapping("/filterprice/{price}")
