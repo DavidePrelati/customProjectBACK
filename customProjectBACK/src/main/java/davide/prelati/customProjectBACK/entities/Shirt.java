@@ -22,6 +22,8 @@ public class Shirt {
 
     private int number;
     private double price;
+
+    @Column(name = "url_image", columnDefinition = "TEXT")
     private String urlImage;
 
     @ManyToOne
